@@ -6,20 +6,29 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
+import java.util.Random;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 public class NSFW implements MessageCreateListener {
     final HttpClient http = HttpClient.newBuilder().build();
+    Gson gson = new Gson();
+    Random random = new Random();
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
         if (event.getMessageContent().startsWith("!e621")) {
-            if(!(event.getMessageAuthor().getId()==830925887330713631L)){
+            if(event.getServerTextChannel().get().isNsfw()){
                 String[] slicedArgs = Arrays.copyOfRange(event.getMessageContent().split(" "),1,event.getMessageContent().split(" ").length);
                 NSFW nsfw = new NSFW();
                 String result = nsfw.search_e621(String.join("%20",slicedArgs));
-                System.out.println(result);
+                JsonArray root = JsonParser.parseString(result).getAsJsonObject().get("posts").getAsJsonArray();
+                int numberToGet = random.nextInt(76); // there are 75 results per page, and random.nextInt is i+1 maxbound
+                event.getChannel().sendMessage(root.get(numberToGet).getAsJsonObject().get("sample").getAsJsonObject().get("url").getAsString());
             }
         }
     }
