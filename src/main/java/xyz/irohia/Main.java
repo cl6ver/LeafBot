@@ -11,5 +11,6 @@ public final class Main {
         api.addListener(new Ping());
         api.addListener(new NSFW());
         api.addListener(new Ban());
+        api.addListener(new Kick());
     }
 }
