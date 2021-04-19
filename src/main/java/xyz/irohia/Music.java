@@ -83,7 +83,8 @@ public class Music implements MessageCreateListener {
                         });
                     }
                 }catch(AssertionError e){
-                    System.out.print(""); // do not throw this error to the console
+                    event.getChannel().sendMessage("Everything exploded!");
+                    event.getChannel().sendMessage("`AssertionError: "+e.getMessage()+"`");
                 }
             }
         }

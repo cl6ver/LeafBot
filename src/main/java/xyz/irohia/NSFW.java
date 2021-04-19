@@ -27,7 +27,7 @@ public class NSFW implements MessageCreateListener {
                 NSFW nsfw = new NSFW();
                 String result = nsfw.search_e621(String.join("%20",slicedArgs));
                 JsonArray root = JsonParser.parseString(result).getAsJsonObject().get("posts").getAsJsonArray();
-                int numberToGet = random.nextInt(root.size()+1); // there are 75 results per page, and random.nextInt is i+1 maxbound
+                int numberToGet = random.nextInt(root.size()+1);
                 event.getChannel().sendMessage(root.get(numberToGet).getAsJsonObject().get("sample").getAsJsonObject().get("url").getAsString());
             }
         }
